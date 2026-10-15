@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 27% 95%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 260 52% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 10% 90%;
+    --secondary-foreground: 240 10% 3.9%;
+    --muted: 240 10% 90%;
+    --muted-foreground: 240 4% 46.1%;
+    --accent: 220 83% 67%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 260 52% 65%;
+    --chart-1: 260 52% 65%;
+    --chart-2: 220 83% 67%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+
+    /* AI Detail Page Design Tokens */
+    --dp-bg: #fafaf7;
+    --dp-paper: #ffffff;
+    --dp-ink: #0a0a0a;
+    --dp-ink-muted: #5a5a5a;
+    --dp-line: #e5e5e5;
+    --dp-accent: #e63946;
+    --dp-beige: #f5ede0;
+    --dp-black: #0a0a0a;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 260 52% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 220 83% 67%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 260 52% 65%;
+    --chart-1: 260 52% 65%;
+    --chart-2: 220 83% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Detail Page Specific Classes */
+.detail-page-container {
+  width: 860px !important;
+  max-width: 860px !important;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--dp-bg);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.detail-page-container * {
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+}
+
+.detail-page-container h1, 
+.detail-page-container h2 {
+  font-family: 'Playfair Display', serif;
+}
+
+.detail-page-container .mono {
+  font-family: 'JetBrains Mono', monospace;
+}
