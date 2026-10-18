@@ -6,7 +6,9 @@ import { doc, onSnapshot, Timestamp, DocumentData } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase/client";
 import { useParams, useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Loader2, ArrowLeft, Pencil, ShoppingBag, Tag, Palette, Download, ImageIcon, CheckCircle2, Calendar } from "lucide-react";
+import { Loader2, ArrowLeft, Pencil, ShoppingBag, Tag, Palette, Download, ImageIcon, CheckCircle2, Calendar, TrendingUp, Lightbulb, BotMessageSquare } from "lucide-react";
+import Image from "next/image";
+import { MarkdownReport } from "@/components/reports/MarkdownReport";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -214,7 +216,12 @@ export default function ReportDetailPage() {
           platform: data.platform,
           category: data.category,
           timeframe: data.timeframe,
-          template: data.template
+          template: data.template,
+          automatedData: docCollectionPath === 'automated_plans' ? {
+              trendAnalysis: data.trendAnalysis,
+              productIdea: data.productIdea,
+              marketingPlan: data.marketingPlan,
+          } : undefined
         };
         setDocument(mappedDoc);
 
@@ -362,6 +369,7 @@ export default function ReportDetailPage() {
   }
 
   const isTrendReport = docCollectionPath === 'trend_reports';
+  const isAutomatedPlan = docCollectionPath === 'automated_plans';
   const isPremiumPage = docCollectionPath === 'structured_pages' && document.content;
   const is4P = document.template?.includes('4페이지') || document.template?.includes('스탠다드');
   const isBuilder = document.template?.startsWith('빌더');
@@ -386,7 +394,7 @@ export default function ReportDetailPage() {
                 </Link>
             </Button>
             <div className="flex gap-2">
-                {!isTrendReport && (
+                {!isTrendReport && !isAutomatedPlan && (
                     <Button variant="outline" size="sm" onClick={handleDownloadHtml} className="border-2 border-slate-900 font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-50 h-9">
                         <Download className="mr-2 h-4 w-4" /> HTML
                     </Button>
@@ -422,7 +430,54 @@ export default function ReportDetailPage() {
         )}
 
         <CardContent className={isPremiumPage ? "p-0" : "p-6 md:p-10 bg-white"}>
-            {isTrendReport ? (
+            {isAutomatedPlan ? (
+              <div className="space-y-12 animate-in fade-in-50">
+                <div className="bg-indigo-50 border-2 border-slate-900 p-6 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                   <h3 className="text-base font-black text-slate-900 mb-1 uppercase tracking-tight">통합 기획 키워드</h3>
+                   <p className="text-sm font-bold text-indigo-700">{document.query}</p>
+                </div>
+
+                {document.automatedData?.trendAnalysis && (
+                    <div className="space-y-4">
+                        <h3 className="text-lg font-black text-slate-900 uppercase flex items-center gap-2">
+                            <TrendingUp className="h-5 w-5 text-indigo-600" /> 1단계: 시장 트렌드 분석
+                        </h3>
+                        <TrendReportDetail data={document.automatedData.trendAnalysis} />
+                    </div>
+                )}
+
+                {document.automatedData?.productIdea && (
+                    <div className="space-y-6 pt-6 border-t-2 border-slate-200">
+                        <h3 className="text-lg font-black text-slate-900 uppercase flex items-center gap-2">
+                            <Lightbulb className="h-5 w-5 text-amber-500" /> 2단계: 상품 기획 리포트 및 컨셉 보드
+                        </h3>
+                        {document.automatedData.productIdea.images?.length > 0 && (
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                                {document.automatedData.productIdea.images.map((imgUrl: string, imgIdx: number) => (
+                                    <div key={imgIdx} className="relative aspect-square border-2 border-slate-900 rounded-xl overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                        <Image src={imgUrl} alt={`Concept ${imgIdx+1}`} fill className="object-cover" referrerPolicy="no-referrer" />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        <div className="p-6 border-2 border-slate-900 rounded-xl bg-slate-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                            <MarkdownReport content={document.automatedData.productIdea.report} />
+                        </div>
+                    </div>
+                )}
+
+                {document.automatedData?.marketingPlan && (
+                    <div className="space-y-6 pt-6 border-t-2 border-slate-200">
+                        <h3 className="text-lg font-black text-slate-900 uppercase flex items-center gap-2">
+                            <BotMessageSquare className="h-5 w-5 text-rose-500" /> 3단계: 마케팅 전략 및 캠페인 플랜
+                        </h3>
+                        <div className="p-6 border-2 border-slate-900 rounded-xl bg-slate-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                            <MarkdownReport content={document.automatedData.marketingPlan.report} />
+                        </div>
+                    </div>
+                )}
+              </div>
+            ) : isTrendReport ? (
               <div className="space-y-8">
                 <div className="bg-slate-50 border-2 border-slate-900 p-4 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] grid grid-cols-2 sm:grid-cols-3 gap-4">
                     <div>
